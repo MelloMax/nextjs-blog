@@ -1,8 +1,8 @@
 import Image from "next/image";
-import {agent} from "@/app/agent";
+import { openAgent } from "@/app/agent";
 import TextChat from '@/components/TextChat'
-import * as z from "zod";
-import {HumanMessage} from "@langchain/core/messages";
+import {HumanMessage} from "langchain";
+
 export default function Home() {
     return (
         <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -19,10 +19,10 @@ export default function Home() {
 
                 <TextChat className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50" promiseLike={async () => {
                     'use server';
-                    const res = await agent.invoke([
-                        new HumanMessage(`帮我生成一份清单`)
-                    ])
-                    return res
+                    const res = await openAgent.invoke({
+                        messages: [new HumanMessage(`hello?`)],
+                    })
+                    return res.messages.at(-1)!.content
                 }
                 }></TextChat>
 
